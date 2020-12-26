@@ -1,0 +1,28 @@
+<div id="mapa-mapbox"></div>
+<div id="menu">
+  <select [(ngModel)]="mapStyleSelected" (change)="changeMapStyle()">
+    <option *ngFor="let map of mapListStyle">
+      {{ map }}
+    </option>
+  </select>
+  <select [(ngModel)]="languageSelected" (change)="changeLanguage()">
+    <option *ngFor="let lang of languages" value="{{ lang.id }}">
+      {{ lang.name }}
+    </option>
+  </select>
+</div>
+<div class="calculation-box">
+  <div [innerHtml]="calculateArea"></div>
+</div>
+<div [innerHtml]="latlng" class="info"></div>
+<div class="layer-control collapsible">
+  <b>layer list</b>
+  <div class="layer-list">
+    <ul>
+      <li *ngFor="let layer of layerList">
+        {{ layer }}
+        <button (click)="showHideLayerByName(layer, $event)">Ocultar</button>
+      </li>
+    </ul>
+  </div>
+</div>
