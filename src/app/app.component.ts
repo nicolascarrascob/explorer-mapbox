@@ -180,7 +180,8 @@ export class AppComponent implements OnInit{
         'paint': {}
         },'aeroway-line');
 
-
+    //load GeoJson fom url using cluster
+    this.loadGeoJsonClusterFromUrl();
   }
   setStylePolygonLayer = (nameLayer:string, sourceName:string, fillColor:string, borderColor:string) => {
      this.mapa.addLayer({
@@ -230,6 +231,7 @@ export class AppComponent implements OnInit{
     this.mapa.loadImage( 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Official_b.a.t.m.a.n._logo.svg/800px-Official_b.a.t.m.a.n._logo.svg.png',
       this.getImage);
   }
+
   //https://docs.mapbox.com/mapbox-gl-js/example/add-image/
    getImage = (error:any, img:any) =>{
     if (error) throw error;
@@ -336,26 +338,26 @@ obtenerLatutudLongitudMouse = (data:any) => {
 }
 
  calculateLayerArea =  (data:any) => {
-        if (data.features.length > 0) {
-          const features = data.features[0];
-          if(features.geometry.type === 'Polygon'){
-            const area = Turf.area(features);
-            // restrict to area to 2 decimal points
-            const rounded_area = Math.round(area * 100) / 100;
-            this.calculateArea = ` <p>Área del poligono.</p><p><strong> ${rounded_area} </strong> metros cuadrados</p>`;
-          } else if(features.geometry.type === 'Point'){
-            this.calculateArea = `Coordenadas del punto: <br/>
-                                  <strong>Latitud: ${features.geometry.coordinates[0]} </strong> 
-                                  <br/><strong>Longitud: ${features.geometry.coordinates[1]}`;
-          }else if (features.geometry.type === "LineString"){
-            // const line = Turf.lineString(data.features[0].geometry.coordinates);
-            // const options = {units: 'miles'};
-            // const along = Turf.length(line, options);
-            // this.calculateArea = ' <p>Largo de la línea.</p><p><strong>'+ along +'</strong> en kilometros</p>';
-            this.calculateArea = ' ';
-          }
-        }
-      };
+    if (data.features.length > 0) {
+      const features = data.features[0];
+      if(features.geometry.type === 'Polygon'){
+        const area = Turf.area(features);
+        // restrict to area to 2 decimal points
+        const rounded_area = Math.round(area * 100) / 100;
+        this.calculateArea = ` <p>Área del poligono.</p><p><strong> ${rounded_area} </strong> metros cuadrados</p>`;
+      } else if(features.geometry.type === 'Point'){
+        this.calculateArea = `Coordenadas del punto: <br/>
+                              <strong>Latitud: ${features.geometry.coordinates[0]} </strong> 
+                              <br/><strong>Longitud: ${features.geometry.coordinates[1]}`;
+      }else if (features.geometry.type === "LineString"){
+        // const line = Turf.lineString(data.features[0].geometry.coordinates);
+        // const options = {units: 'miles'};
+        // const along = Turf.length(line, options);
+        // this.calculateArea = ' <p>Largo de la línea.</p><p><strong>'+ along +'</strong> en kilometros</p>';
+        this.calculateArea = ' ';
+      }
+    }
+  };
   changeMapStyle = () =>{
       console.log(this.mapStyleSelected);
       //'mapbox://styles/mapbox/streets-v11',
@@ -395,4 +397,108 @@ obtenerLatutudLongitudMouse = (data:any) => {
     }
     //this.mapa.setPaintProperty(this.layerColorSelected, 'fill-color', color); //circle-color
   }
+  loadGeoJsonClusterFromUrl = () => {
+    this.mapa.addSource('earthquakes', {
+      type: 'geojson',
+      // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+      // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+      data:
+      'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+    this.mapa.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'earthquakes',
+        filter: ['has', 'point_count'],
+        paint: {
+          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+          // with three steps to implement three types of circles:
+          //   * Blue, 20px circles when point count is less than 100
+          //   * Yellow, 30px circles when point count is between 100 and 750
+          //   * Pink, 40px circles when point count is greater than or equal to 750
+          'circle-color': [ 'step', ['get', 'point_count'],'#51bbd6', 100,'#f1f075',750,'#f28cb1' ],
+          'circle-radius': ['step',['get', 'point_count'], 20, 100, 30, 750, 40]
+        }
+      });
+
+    this.mapa.addLayer({
+      id: 'cluster-count',
+      type: 'symbol',
+      source: 'earthquakes',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12
+      }
+    });
+
+    this.mapa.addLayer({
+      id: 'unclustered-point',
+      type: 'circle',
+      source: 'earthquakes',
+      filter: ['!', ['has', 'point_count']],
+      paint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 4,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+      }
+    });
+
+    this.mapa.on('click', 'clusters', this.clusterClickInspectEvent);
+    this.mapa.on('click', 'unclustered-point', this.clusterClickDetailEvent);
+    //set ponter when is over the layer 
+    this.mouseEnterLeave('clusters');  
+  }
+  // inspect a cluster on click 
+  clusterClickInspectEvent = (e:any) => {
+    const features = this.mapa.queryRenderedFeatures(e.point, {
+        layers: ['clusters']
+        });
+    const clusterId = features[0].properties.cluster_id;
+    this.mapa.getSource('earthquakes')
+        .getClusterExpansionZoom(clusterId, (err, zoom) =>{
+          if (err) return;
+          this.mapa.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
+          }
+      );
+  }
+
+  // When a click event occurs on a feature in
+  // the unclustered-point layer, open a popup at
+  // the location of the feature, with
+  // description HTML from its properties.
+  clusterClickDetailEvent = (e:any) => {      
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const mag = e.features[0].properties.mag;
+    let tsunami;
+    
+    if (e.features[0].properties.tsunami === 1) {
+      tsunami = 'yes';
+    } else {
+      tsunami = 'no';
+    }
+    
+    // Ensure that if the map is zoomed out such that
+    // multiple copies of the feature are visible, the
+    // popup appears over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+    
+    new Mapboxgl.Popup()
+      .setLngLat(coordinates)
+      .setHTML('magnitude: ' + mag + '<br>Was there a tsunami?: ' + tsunami)
+      .addTo(this.mapa);
+
+  }
+
 }
