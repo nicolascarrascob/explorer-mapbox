@@ -32,7 +32,8 @@ export class AppComponent implements OnInit{
   languages = [{id:'es', name:'Español'}, {id:'en', name:'Ingles'}, {id: 'ru', name: 'Ruso'}, {id: 'de', name: 'Aleman'}, {id: 'fr', name: 'Frances'},{id: 'ja', name: 'Japones'}, {id:'ko', name: 'Koreano'}];
   languageSelected = {id:'es', name:'Español'}
   layerList;
-
+  layerColors = ['#ffffcc','#a1dab4','#41b6c4','#2c7fb8','#253494','#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'];
+  layerColorSelected ;
   ngOnInit(): void {
       Mapboxgl.accessToken = environment.mapboxKey;
 
@@ -119,7 +120,7 @@ export class AppComponent implements OnInit{
     //load data
     this.layerList = new Array();
     //Load layer from object
-    this.layerList.push('states-layer');
+    this.layerList.push({name:'states-layer', type:'polygon'});
     this.loadGeoJsonFromObject(minesotaJson, 'states');
 
     //set style polygon layer
@@ -132,7 +133,7 @@ export class AppComponent implements OnInit{
     this.mouseEnterLeave('states-layer');
 
     //LOAD OTHER LAYER 
-    this.layerList.push('pointLayers-layer');
+    this.layerList.push({name:'pointLayers-layer', type: 'circle'});
     this.loadGeoJsonFromUrl('pointLayers','https://tile-server.dev.geonodosoft.cl/albergues_20200625052159.geojson' );
     
     //set style layer
@@ -146,7 +147,7 @@ export class AppComponent implements OnInit{
 
 
     //LOAD SCHOOL LAYER 
-    this.layerList.push('schoolLayers-layer');
+    this.layerList.push({name:'schoolLayers-layer',type:'circle'});
     this.loadGeoJsonFromUrl('schoolLayers','https://tile-server.dev.geonodosoft.cl/acciona_20200721111409.geojson' );
     
     //set style layer //https://docs.mapbox.com/mapbox-gl-js/example/cluster/
@@ -158,9 +159,27 @@ export class AppComponent implements OnInit{
     //set ponter when is over the layer 
     this.mouseEnterLeave('schoolLayers-layer');  
 
-    //load image in map
-      
+    //load image in map  
     this.loadImageInMapFromUrl();
+
+    //WMS ??????
+    //da errores con el pama satelital. puede ser por el tipo de tile q se esta incrustando (mismo tipo)
+    this.mapa.addSource('wms-test-source', {
+        'type': 'raster',
+        // use the tiles option to specify a WMS tile source URL
+        // https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/
+        'tiles': [
+          'https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=256&height=256&layers=Natural2015'
+        ],
+        'tileSize': 256
+      });
+    this.mapa.addLayer({
+        'id': 'wms-test-layer',
+        'type': 'raster',
+        'source': 'wms-test-source',
+        'paint': {}
+        },'aeroway-line');
+
 
   }
   setStylePolygonLayer = (nameLayer:string, sourceName:string, fillColor:string, borderColor:string) => {
@@ -361,5 +380,19 @@ obtenerLatutudLongitudMouse = (data:any) => {
        e.target.innerHTML = 'Ocultar';
        this.mapa.setLayoutProperty(layerName, 'visibility', 'visible');
     }
+  }
+
+  changeLayerColor = (color:string) =>{
+    console.log(color);
+    console.log(this.layerColorSelected);
+    const layerInfo = this.layerColorSelected.split("|");
+    console.log(layerInfo[0]);
+    console.log(layerInfo[1]);
+    if('polygon' === layerInfo[1]){
+      this.mapa.setPaintProperty(layerInfo[0], 'fill-color', color);
+    }else{
+      this.mapa.setPaintProperty(layerInfo[0], 'circle-color', color);
+    }
+    //this.mapa.setPaintProperty(this.layerColorSelected, 'fill-color', color); //circle-color
   }
 }
