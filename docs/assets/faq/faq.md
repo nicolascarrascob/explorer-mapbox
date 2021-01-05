@@ -8,7 +8,7 @@ Explorer es el visor de mapas de Geonodo que permite la visualización de mapas 
 
 **Si**. Para activar o desactivar una capa, debes hacer click en el botón de menú (arriba a la izquierda) para desplegar la barra lateral. En la barra lateral existe una pestaña llamada "capas" en la cual se encuentran las capas agrupadas y se pueden activar o desactivar utilizando el botón interruptor.
 
-![Como activar o desactivar una capa](/assets/faq/faq-2.gif "Como activar o desactivar una capa")
+![Como activar o desactivar una capa](assets/faq/faq-2.gif "Como activar o desactivar una capa")
 
 <br>
 
@@ -16,7 +16,7 @@ Explorer es el visor de mapas de Geonodo que permite la visualización de mapas 
 
 Para acceder a los metadatos de una figura que se visualiza en el mapa, solo debes hacer click sobre la figura para desplegar la barra lateral con la información requerida.
 
-![Como acceder a los metadatos de una figura](/assets/faq/faq-3.gif "Como acceder a los metadatos de una figura")
+![Como acceder a los metadatos de una figura](assets/faq/faq-3.gif "Como acceder a los metadatos de una figura")
 
 <br>
 
@@ -24,7 +24,7 @@ Para acceder a los metadatos de una figura que se visualiza en el mapa, solo deb
 
 **Si**. Para hacerlo, sólo debes arrastrar un documento KML al mapa. No se puede importar archivos en formato KMZ.
 
-![Como importar un documento KML](/assets/faq/faq-4.gif "Como importar un documento KML")
+![Como importar un documento KML](assets/faq/faq-4.gif "Como importar un documento KML")
 
 <br>
 
@@ -32,7 +32,7 @@ Para acceder a los metadatos de una figura que se visualiza en el mapa, solo deb
 
 **Si**. Para descargar una capa, debes hacer click en el botón de menú (arriba a la izquierda) para desplegar la barra lateral. En la barra lateral existe una pestaña llamada "capas" en la cual se encuentran las capas agrupadas y se pueden descargar haciendo click en el icono de descarga y seleccionando un formato de descarga (Shapefile, GeoJSON, KML).
 
-![Como importar un documento KML](/assets/faq/faq-5.gif "Como importar un documento KML")
+![Como importar un documento KML](assets/faq/faq-5.gif "Como importar un documento KML")
 
 <br>
 
@@ -46,8 +46,7 @@ Recomendamos usar **[Google Chrome 74 ó superior](https://www.google.com/chrome
 
 Sí. Puedes girarlo presionando Alt + Shift y moviendo el cursor sobre el, el mapa deberá girar. Al presionar el botón de brújula el mapa regresará en dirección norte del mismo.
 
-<br>
----
+## <br>
 
 <br>
 
