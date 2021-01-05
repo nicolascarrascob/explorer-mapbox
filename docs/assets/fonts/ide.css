@@ -1,0 +1,69 @@
+@font-face {
+    font-family: 'geologia';
+    src: url('geologia.woff2') format('woff2'), url('geologia.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MinisteriodeEnergia';
+    src: url('MinisteriodeEnergia.woff2') format('woff2'), url('MinisteriodeEnergia.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SimbolosGenericos';
+    src: url('SimbolosGenericos.woff2') format('woff2'), url('SimbolosGenericos.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OtrosSimbolos';
+    src: url('OtrosSimbolos.woff2') format('woff2'), url('OtrosSimbolos.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MinisteriodeSalud';
+    src: url('MinSalud.woff2') format('woff2'), url('MinSalud.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MinisteriodeEducacion';
+    src: url('MinisteriodeEducacion.woff2') format('woff2'), url('MinisteriodeEducacion.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Estructuras';
+    src: url('Estructuras.woff2') format('woff2'), url('Estructuras.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'InstitucionesPublicasydeSeg';
+    src: url('InstitucionesPublicasydeSeguridad.woff2') format('woff2'), url('InstitucionesPublicasydeSeguridad.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MinisteriodeJusticia';
+    src: url('MinisteriodeJusticia.woff2') format('woff2'), url('MinisteriodeJusticia.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Datafosyac';
+    src: url('Datafosyac.woff2') format('woff2'), url('Datafosyac.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
