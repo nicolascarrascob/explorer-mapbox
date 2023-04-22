@@ -20,7 +20,7 @@
     "@angular/platform-browser-dynamic": "~11.0.5",
     "@angular/router": "~11.0.5",
     "@mapbox/mapbox-gl-draw": "github:mapbox/mapbox-gl-draw",
-    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
+    "@mapbox/mapbox-gl-geocoder": "^4.7.4",
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@turf/along": "^6.0.1",
     "@turf/distance": "^6.0.1",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1100.5",
-    "@angular/cli": "~11.0.5",
+    "@angular/cli": "~11.2.19",
     "@angular/compiler-cli": "~11.0.5",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
